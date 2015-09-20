@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+
+  <body>
+    <h1>remoteu2f - register</h1>
+
+    <h2>{{.Message}}</h2>
+
+    <p class="instructions">
+    Please insert/touch your security key to complete the registration.
+    </p>
+
+    <p class="status">
+    Status: <span id="status">waiting for security key</span>
+    </p>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"
+            integrity="sha384-8gBf6Y4YYq7Jx97PIqmTwLPin4hxIzQw5aDmUg/DDhul9fFpbbLcLh3nTIIDJKhx"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="remoteu2f.js"></script>
+    <script type="text/javascript" src="u2f_api.js"></script>
+    <script>
+      u2f.register([{{.Request}}], [], handleKeyResponse, 2*60)
+    </script>
+
+  </body>
+</html>

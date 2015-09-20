@@ -1,0 +1,8 @@
+# /etc/default/remoteu2f-proxy
+
+OPTS=" \
+-base_url=https://yourdomain:8800 \
+-tls_cert=/etc/ssl/yourcert.crt \
+-tls_key=/etc/ssl/yourkey.key \
+-token_file=/etc/remoteu2f-proxy/tokens \
+"

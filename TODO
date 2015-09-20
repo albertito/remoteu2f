@@ -1,0 +1,6 @@
+
+- Add more documentation, specially about how it works and trust model.
+- Write a remoteu2f-agent to avoid having to open the browser.
+- Support security key counters.
+- Make the proxy rate limit an option.
+

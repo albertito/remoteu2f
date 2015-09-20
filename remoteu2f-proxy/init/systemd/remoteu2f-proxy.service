@@ -1,0 +1,11 @@
+[Unit]
+Description = remoteu2f proxy
+
+[Service]
+EnvironmentFile = /etc/default/remoteu2f-proxy
+ExecStart = /usr/local/bin/remoteu2f-proxy -logtostderr $OPTS
+Type = simple
+User = www-data
+
+[Install]
+WantedBy = multi-user.target

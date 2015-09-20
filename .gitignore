@@ -1,0 +1,14 @@
+
+# vim swap files.
+.*.sw*
+
+# keys and certificates that may be used for testing.
+*.pem
+
+# token files that may be used for testing.
+tokens
+
+# binaries we generate.
+remoteu2f-proxy/remoteu2f-proxy
+remoteu2f-cli/remoteu2f-cli
+libpam/*.so

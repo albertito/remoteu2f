@@ -1,0 +1,44 @@
+
+syntax = "proto3";
+
+package remoteu2f;
+
+// Generic empty message, for RPCs that don't need one.
+message Void {
+}
+
+// Generic message containing a request key and URL.
+message Url {
+	string key = 1;
+	string url = 2;
+}
+
+// Prepare an operation.
+message Prepare {
+	// Generic json content to return.
+	bytes json = 1;
+
+	// User-readable message to show on the web page.
+	string msg = 2;
+
+	// Request type, used only for selecting the web page template (no
+	// functional behaviour difference from an RPC perspective).
+	enum RType {
+		UNKNOWN = 0;
+		REGISTER = 1;
+		AUTHENTICATE = 2;
+	}
+	RType rtype = 3;
+}
+
+// Operation response.
+message Response {
+	bytes json = 1;
+}
+
+
+service RemoteU2F {
+	rpc PrepareOp(Prepare) returns (Url);
+	rpc GetOpResponse(Url) returns (Response);
+	rpc GetAppID(Void) returns (Url);
+}
