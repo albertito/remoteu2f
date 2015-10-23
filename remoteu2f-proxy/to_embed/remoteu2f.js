@@ -12,14 +12,20 @@ function handleKeyResponse(resp) {
             5: "Timed out waiting for security key",
         }
 
+        $("div#icon").toggleClass("pulse", false);
+        $("span#icon").text(" ✘ ");
         $('#status').text(
                 codeToText[resp.errorCode] + " -- "
                 + resp.errorMessage);
         return;
     }
 
+    $("span#icon").text(" ○ ○ ○ ");
     $('#status').text('sending response');
     $.post('response', JSON.stringify(resp)).done(function() {
+        $("div#icon").toggleClass("pulse", false);
+        $("span#icon").text(" ✔ ");
         $('#status').text('done');
+
     });
 }

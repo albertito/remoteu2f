@@ -1,0 +1,35 @@
+
+body {
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  background: #ecf0f1;
+  text-align: center;
+}
+
+h1 {
+    background: #3f51b5;
+    color: #efefef;
+    padding: 1em 0 1em 1em;
+    margin: 0;
+    font-weight: normal;
+}
+h2 {
+    font-weight: normal;
+}
+
+div.huge {
+    font-size: xx-large;
+}
+
+@keyframes waiting_animation {
+    0% {color: #aaa;}
+    50% {color: #000;}
+    100% {color: #aaa;}
+}
+
+div.pulse {
+    animation: waiting_animation 2s infinite;
+}
+

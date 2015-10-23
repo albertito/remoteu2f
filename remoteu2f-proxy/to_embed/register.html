@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
+    <title>remoteu2f - register</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto'
+        rel='stylesheet' type='text/css'/>
+
+    <link href='remoteu2f.css' rel='stylesheet' type='text/css'/>
   </head>
 
   <body>
@@ -8,12 +15,14 @@
 
     <h2>{{.Message}}</h2>
 
-    <p class="instructions">
-    Please insert/touch your security key to complete the registration.
-    </p>
+    <div id="icon" class="huge pulse">
+      <b><span id="icon"> ● ● ● </span></b>
+    </div>
 
-    <p class="status">
-    Status: <span id="status">waiting for security key</span>
+    <hr/>
+
+    <p id="status">
+    Please insert/touch your security key to complete the registration
     </p>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"

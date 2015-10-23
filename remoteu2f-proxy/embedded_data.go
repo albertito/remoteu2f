@@ -10,6 +10,13 @@ package main
 const authenticate_html = `<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
+    <title>remoteu2f - authenticate</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto'
+        rel='stylesheet' type='text/css'/>
+
+    <link href='remoteu2f.css' rel='stylesheet' type='text/css'/>
   </head>
 
   <body>
@@ -17,12 +24,14 @@ const authenticate_html = `<!DOCTYPE html>
 
     <h2>{{.Message}}</h2>
 
-    <p class="instructions">
-    Please insert/touch your security key to authenticate.
-    </p>
+    <div id="icon" class="huge pulse">
+      <b><span id="icon"> ● ● ● </span></b>
+    </div>
 
-    <p class="status">
-    Status: <span id="status">waiting for security key</span>
+    <hr/>
+
+    <p id="status">
+    Please insert/touch your security key to authenticate
     </p>
 
     <script
@@ -47,6 +56,13 @@ const authenticate_html = `<!DOCTYPE html>
 const register_html = `<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
+    <title>remoteu2f - register</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto'
+        rel='stylesheet' type='text/css'/>
+
+    <link href='remoteu2f.css' rel='stylesheet' type='text/css'/>
   </head>
 
   <body>
@@ -54,12 +70,14 @@ const register_html = `<!DOCTYPE html>
 
     <h2>{{.Message}}</h2>
 
-    <p class="instructions">
-    Please insert/touch your security key to complete the registration.
-    </p>
+    <div id="icon" class="huge pulse">
+      <b><span id="icon"> ● ● ● </span></b>
+    </div>
 
-    <p class="status">
-    Status: <span id="status">waiting for security key</span>
+    <hr/>
+
+    <p id="status">
+    Please insert/touch your security key to complete the registration
     </p>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"
@@ -93,15 +111,21 @@ function handleKeyResponse(resp) {
             5: "Timed out waiting for security key",
         }
 
+        $("div#icon").toggleClass("pulse", false);
+        $("span#icon").text(" ✘ ");
         $('#status').text(
                 codeToText[resp.errorCode] + " -- "
                 + resp.errorMessage);
         return;
     }
 
+    $("span#icon").text(" ○ ○ ○ ");
     $('#status').text('sending response');
     $.post('response', JSON.stringify(resp)).done(function() {
+        $("div#icon").toggleClass("pulse", false);
+        $("span#icon").text(" ✔ ");
         $('#status').text('done');
+
     });
 }
 `
@@ -764,6 +788,47 @@ u2f.register = function(registerRequests, signRequests,
     port.postMessage(req);
   });
 };
+`
+
+
+// to_embed/remoteu2f.css ----- 8< ----- 8< ----- 8< ----- 8< -----
+
+// remoteu2f_css contains the content of to_embed/remoteu2f.css.
+const remoteu2f_css = `
+body {
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  background: #ecf0f1;
+  text-align: center;
+}
+
+h1 {
+    background: #3f51b5;
+    color: #efefef;
+    padding: 1em 0 1em 1em;
+    margin: 0;
+    font-weight: normal;
+}
+h2 {
+    font-weight: normal;
+}
+
+div.huge {
+    font-size: xx-large;
+}
+
+@keyframes waiting_animation {
+    0% {color: #aaa;}
+    50% {color: #000;}
+    100% {color: #aaa;}
+}
+
+div.pulse {
+    animation: waiting_animation 2s infinite;
+}
+
 `
 
 

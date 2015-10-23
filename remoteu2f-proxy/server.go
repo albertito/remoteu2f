@@ -1,15 +1,17 @@
 package main
 
 // Embed the html and js files we need.
-//go:generate go run tools/embed.go to_embed/*.html to_embed/*.js
+//go:generate go run tools/embed.go to_embed/*.html to_embed/*.js to_embed/*.css
 
 import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
 	"io"
+	"mime"
 	"net"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"sync"
 	"text/template"
@@ -285,6 +287,9 @@ func (s *Server) StaticHandler(path, content string) func(w http.ResponseWriter,
 			http.Error(w, "too many requests", 429)
 			return
 		}
+
+		w.Header().Set("Content-Type",
+			mime.TypeByExtension(filepath.Ext(path)))
 		w.Write([]byte(content))
 	}
 }
@@ -335,6 +340,8 @@ func (s *Server) ListenAndServe() {
 		s.StaticHandler("u2f_api.js", u2f_api_js))
 	r.HandleFunc("/{key}/remoteu2f.js",
 		s.StaticHandler("remoteu2f.js", remoteu2f_js))
+	r.HandleFunc("/{key}/remoteu2f.css",
+		s.StaticHandler("remoteu2f.css", remoteu2f_css))
 	httpServer := http.Server{
 		Addr:    s.HTTPAddr,
 		Handler: r,
