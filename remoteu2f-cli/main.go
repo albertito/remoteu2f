@@ -334,8 +334,11 @@ func PAM(ctx *cli.Context) {
 
 	c := mustGRPCClient(conf.Addr, conf.Token, ctx.GlobalString("ca_file"))
 
-	user, hostname := mustUserInfo()
-	msg := fmt.Sprintf("%s@%s", user, hostname)
+	hostname, err := os.Hostname()
+	if err != nil {
+		fatalf("Error getting hostname: %v", err)
+	}
+	msg := fmt.Sprintf("%s@%s", username, hostname)
 
 	pa, err := c.PrepareAuthentication(
 		msg, conf.AppID, conf.RegistrationValues())
