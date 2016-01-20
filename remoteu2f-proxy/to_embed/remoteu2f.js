@@ -5,7 +5,7 @@ function handleKeyResponse(resp) {
     if (resp.errorCode != undefined && resp.errorCode != u2f.ErrorCodes.OK) {
         codeToText = {
             0: "OK",
-            1: "General error (hardware issues?)",
+            1: "General error (is the security key plugged in?)",
             2: "Bad request (please report)",
             3: "Unsupported configuration (please report)",
             4: "Device ineligible, did you forget to register it?",
