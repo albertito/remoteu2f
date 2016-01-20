@@ -33,7 +33,7 @@ Finally, launch the binary. You can use the provided upstart or systemd
 examples to help you with this, depending on your system.
 
 
-## Building and installing the ssh side
+## Building and installing the sshd side
 
 You will need `pam_prompt_exec.so` and `remoteu2f-cli`:
 
@@ -48,17 +48,26 @@ You will need `pam_prompt_exec.so` and `remoteu2f-cli`:
     sudo cp pam_prompt_exec.so /lib/security
 
 
-Then, configure PAM for ssh (or sudo, or the service of your choice) by
-editing /etc/pam.d/sshd (or equivalent) and adding the following at the
-bottom:
+
+### Configuring sshd
+
+Configure PAM for ssh (or sudo, or the service of your choice) by editing
+`/etc/pam.d/sshd` (or equivalent) and adding the following at the bottom:
 
     auth required pam_prompt_exec.so /usr/local/bin/remoteu2f-cli pam --nullok
+
+
+sshd itself requires the following configuration settings to work properly.
+You can usually set them in `/etc/ssh/sshd_config`:
+
+    UsePAM yes
+    ChallengeResponseAuthentication yes
 
 
 ### Configuring a user
 
 Once you have completed the server install above, each each user that wants to
-use remoteu2f has to configure their client.
+use remoteu2f has to configure their account.
 
 Run `remoteu2f-cli init` and follow the instructions.
 
