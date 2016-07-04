@@ -30,6 +30,12 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+
 // Request type, used only for selecting the web page template (no
 // functional behaviour difference from an RPC perspective).
 type Prepare_RType int32
@@ -54,14 +60,16 @@ var Prepare_RType_value = map[string]int32{
 func (x Prepare_RType) String() string {
 	return proto.EnumName(Prepare_RType_name, int32(x))
 }
+func (Prepare_RType) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{2, 0} }
 
 // Generic empty message, for RPCs that don't need one.
 type Void struct {
 }
 
-func (m *Void) Reset()         { *m = Void{} }
-func (m *Void) String() string { return proto.CompactTextString(m) }
-func (*Void) ProtoMessage()    {}
+func (m *Void) Reset()                    { *m = Void{} }
+func (m *Void) String() string            { return proto.CompactTextString(m) }
+func (*Void) ProtoMessage()               {}
+func (*Void) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
 // Generic message containing a request key and URL.
 type Url struct {
@@ -69,9 +77,10 @@ type Url struct {
 	Url string `protobuf:"bytes,2,opt,name=url" json:"url,omitempty"`
 }
 
-func (m *Url) Reset()         { *m = Url{} }
-func (m *Url) String() string { return proto.CompactTextString(m) }
-func (*Url) ProtoMessage()    {}
+func (m *Url) Reset()                    { *m = Url{} }
+func (m *Url) String() string            { return proto.CompactTextString(m) }
+func (*Url) ProtoMessage()               {}
+func (*Url) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
 // Prepare an operation.
 type Prepare struct {
@@ -82,26 +91,36 @@ type Prepare struct {
 	Rtype Prepare_RType `protobuf:"varint,3,opt,name=rtype,enum=remoteu2f.Prepare_RType" json:"rtype,omitempty"`
 }
 
-func (m *Prepare) Reset()         { *m = Prepare{} }
-func (m *Prepare) String() string { return proto.CompactTextString(m) }
-func (*Prepare) ProtoMessage()    {}
+func (m *Prepare) Reset()                    { *m = Prepare{} }
+func (m *Prepare) String() string            { return proto.CompactTextString(m) }
+func (*Prepare) ProtoMessage()               {}
+func (*Prepare) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
 
 // Operation response.
 type Response struct {
 	Json []byte `protobuf:"bytes,1,opt,name=json,proto3" json:"json,omitempty"`
 }
 
-func (m *Response) Reset()         { *m = Response{} }
-func (m *Response) String() string { return proto.CompactTextString(m) }
-func (*Response) ProtoMessage()    {}
+func (m *Response) Reset()                    { *m = Response{} }
+func (m *Response) String() string            { return proto.CompactTextString(m) }
+func (*Response) ProtoMessage()               {}
+func (*Response) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
 
 func init() {
+	proto.RegisterType((*Void)(nil), "remoteu2f.Void")
+	proto.RegisterType((*Url)(nil), "remoteu2f.Url")
+	proto.RegisterType((*Prepare)(nil), "remoteu2f.Prepare")
+	proto.RegisterType((*Response)(nil), "remoteu2f.Response")
 	proto.RegisterEnum("remoteu2f.Prepare_RType", Prepare_RType_name, Prepare_RType_value)
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
 var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion3
 
 // Client API for RemoteU2F service
 
@@ -158,40 +177,58 @@ func RegisterRemoteU2FServer(s *grpc.Server, srv RemoteU2FServer) {
 	s.RegisterService(&_RemoteU2F_serviceDesc, srv)
 }
 
-func _RemoteU2F_PrepareOp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _RemoteU2F_PrepareOp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Prepare)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(RemoteU2FServer).PrepareOp(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(RemoteU2FServer).PrepareOp(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/remoteu2f.RemoteU2F/PrepareOp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RemoteU2FServer).PrepareOp(ctx, req.(*Prepare))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _RemoteU2F_GetOpResponse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _RemoteU2F_GetOpResponse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Url)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(RemoteU2FServer).GetOpResponse(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(RemoteU2FServer).GetOpResponse(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/remoteu2f.RemoteU2F/GetOpResponse",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RemoteU2FServer).GetOpResponse(ctx, req.(*Url))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func _RemoteU2F_GetAppID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _RemoteU2F_GetAppID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Void)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(RemoteU2FServer).GetAppID(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(RemoteU2FServer).GetAppID(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/remoteu2f.RemoteU2F/GetAppID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RemoteU2FServer).GetAppID(ctx, req.(*Void))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _RemoteU2F_serviceDesc = grpc.ServiceDesc{
@@ -211,5 +248,30 @@ var _RemoteU2F_serviceDesc = grpc.ServiceDesc{
 			Handler:    _RemoteU2F_GetAppID_Handler,
 		},
 	},
-	Streams: []grpc.StreamDesc{},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: fileDescriptor0,
+}
+
+func init() { proto.RegisterFile("remoteu2f.proto", fileDescriptor0) }
+
+var fileDescriptor0 = []byte{
+	// 282 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x6c, 0x51, 0xcd, 0x4e, 0xf3, 0x30,
+	0x10, 0xfc, 0xd2, 0xf4, 0x2f, 0xfb, 0x85, 0x36, 0x5a, 0x2e, 0x51, 0x0f, 0x08, 0xf9, 0x04, 0x42,
+	0x0a, 0x52, 0xe8, 0x0b, 0x44, 0x10, 0x4a, 0x84, 0x94, 0x20, 0xe3, 0xc0, 0x19, 0x84, 0x41, 0x40,
+	0x5b, 0x5b, 0x4e, 0x7a, 0xe8, 0x83, 0x70, 0xe6, 0x55, 0xb1, 0xdd, 0x12, 0xa2, 0xc2, 0x6d, 0x76,
+	0x76, 0xc6, 0x33, 0x5a, 0xc3, 0x58, 0xf1, 0x85, 0xa8, 0xf9, 0x2a, 0x7e, 0x8e, 0xa4, 0x12, 0xb5,
+	0x40, 0xaf, 0x21, 0x48, 0x1f, 0xba, 0x77, 0xe2, 0xf5, 0x89, 0x1c, 0x83, 0x5b, 0xaa, 0x39, 0x06,
+	0xe0, 0xbe, 0xf3, 0x75, 0xe8, 0x1c, 0x3a, 0x47, 0x1e, 0x35, 0xd0, 0x30, 0x2b, 0x35, 0x0f, 0x3b,
+	0x1b, 0x46, 0x43, 0xf2, 0xe1, 0xc0, 0xe0, 0x46, 0x71, 0xf9, 0xa0, 0x38, 0x22, 0x74, 0xdf, 0x2a,
+	0xb1, 0xb4, 0x06, 0x9f, 0x5a, 0x6c, 0x1c, 0x8b, 0xea, 0xe5, 0xdb, 0xa1, 0x21, 0x46, 0xd0, 0x53,
+	0xf5, 0x5a, 0xf2, 0xd0, 0xd5, 0xdc, 0x28, 0x0e, 0xa3, 0x9f, 0x42, 0xdb, 0x87, 0x22, 0xca, 0xf4,
+	0x9e, 0x6e, 0x64, 0x64, 0x0a, 0x3d, 0x3b, 0xe3, 0x7f, 0x18, 0x94, 0xf9, 0x75, 0x5e, 0xdc, 0xe7,
+	0xc1, 0x3f, 0xf4, 0x61, 0x48, 0xd3, 0x59, 0x76, 0xcb, 0x52, 0x1a, 0x38, 0x3a, 0xc5, 0x4f, 0x4a,
+	0x76, 0x95, 0xe6, 0x2c, 0x3b, 0x4f, 0x58, 0x1a, 0x74, 0xc8, 0x81, 0xde, 0xf3, 0x4a, 0x8a, 0x65,
+	0xf5, 0x67, 0xaf, 0xf8, 0xd3, 0x01, 0x8f, 0xda, 0xe0, 0x32, 0xbe, 0xc4, 0x53, 0xf0, 0xb6, 0xd9,
+	0x85, 0x44, 0xfc, 0xdd, 0x68, 0x32, 0x6a, 0x71, 0xe6, 0x34, 0x53, 0xd8, 0x9b, 0xf1, 0xba, 0x90,
+	0x4d, 0xc6, 0x8e, 0x60, 0xb2, 0xdf, 0x9a, 0x1b, 0xd1, 0x09, 0x0c, 0xb5, 0x2b, 0x91, 0x32, 0xbb,
+	0xc0, 0x71, 0x4b, 0x60, 0x8e, 0xbe, 0x1b, 0xf1, 0xd8, 0xb7, 0xdf, 0x73, 0xf6, 0x15, 0x00, 0x00,
+	0xff, 0xff, 0x8f, 0xfa, 0x7d, 0x34, 0xb1, 0x01, 0x00, 0x00,
 }
