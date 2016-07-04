@@ -21,7 +21,7 @@ type RemoteU2FClient struct {
 
 func GRPCClient(addr, token, caFile string) (*RemoteU2FClient, error) {
 	var err error
-	var tCreds credentials.TransportAuthenticator
+	var tCreds credentials.TransportCredentials
 	if caFile == "" {
 		tCreds = credentials.NewClientTLSFromCert(nil, "")
 	} else {
