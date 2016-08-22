@@ -1,0 +1,35 @@
+# Configuration for https://travis-ci.org/
+
+language: go
+go_import_path: blitiri.com.ar/go/remoteu2f
+
+addons:
+    apt:
+        packages:
+            - gcc-6         # A modern GCC
+            - libpam0g-dev  # for our PAM library
+        sources:
+            - ubuntu-toolchain-r-test  # Modern GCCs come from here
+
+env:
+    - CC=gcc-6
+
+install:
+    # Install dependencies, found with "glide list".
+    - go get github.com/codegangsta/cli
+    - go get github.com/golang/glog
+    - go get github.com/golang/protobuf/proto
+    - go get github.com/gorilla/mux
+    - go get github.com/tstranex/u2f
+    - go get golang.org/x/net/context
+    - go get golang.org/x/net/trace
+    - go get golang.org/x/oauth2
+    - go get google.golang.org/grpc
+    - go get google.golang.org/grpc/codes
+    - go get google.golang.org/grpc/credentials
+    - go get google.golang.org/grpc/credentials/oauth
+    - go get google.golang.org/grpc/metadata
+
+script:
+    - make all
+
