@@ -244,7 +244,7 @@ func Register(ctx *cli.Context) {
 	user, hostname := mustUserInfo()
 	msg := fmt.Sprintf("%s@%s", user, hostname)
 
-	pr, err := c.PrepareRegister(msg, conf.AppID)
+	pr, err := c.PrepareRegister(msg, conf.AppID, conf.RegistrationValues())
 	if err != nil {
 		fatalf("Error preparing registration: %v\n", err)
 	}

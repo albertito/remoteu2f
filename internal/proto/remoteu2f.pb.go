@@ -85,6 +85,10 @@ func (*Url) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 // Prepare an operation.
 type Prepare struct {
 	// Generic json content to return.
+	// This is a marshalled version of u2f.WebRegisterRequest or
+	// u2f.WebSignRequest, depending on the operation.
+	// We don't need to access this directly in the proxy, so we keep this
+	// opaque and decode it again at javascript.
 	Json []byte `protobuf:"bytes,1,opt,name=json,proto3" json:"json,omitempty"`
 	// User-readable message to show on the web page.
 	Msg   string        `protobuf:"bytes,2,opt,name=msg" json:"msg,omitempty"`

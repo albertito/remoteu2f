@@ -66,15 +66,16 @@ type PendingRegister struct {
 	challenge *u2f.Challenge
 }
 
-func (c *RemoteU2FClient) PrepareRegister(msg, appID string) (*PendingRegister, error) {
-	var trustedFacets = []string{appID}
+func (c *RemoteU2FClient) PrepareRegister(
+	msg, appID string, regs []u2f.Registration) (*PendingRegister, error) {
 
-	challenge, err := u2f.NewChallenge(appID, trustedFacets)
+	challenge, err := u2f.NewChallenge(appID, []string{appID})
 	if err != nil {
 		return nil, fmt.Errorf("u2f.NewChallenge error: %v", err)
 	}
 
-	j, err := json.Marshal(challenge.RegisterRequest())
+	req := u2f.NewWebRegisterRequest(challenge, regs)
+	j, err := json.Marshal(req)
 	if err != nil {
 		return nil, fmt.Errorf("json marshalling error: %v", err)
 	}
@@ -124,41 +125,21 @@ type PendingAuth struct {
 	Key *pb.Url
 
 	// Registrations we sent auth requests for.
-	regs []*u2f.Registration
+	regs []u2f.Registration
 
-	// Challenges matching each registration.
-	challenges []*u2f.Challenge
+	// Challenge.
+	challenge *u2f.Challenge
 }
 
-func (c *RemoteU2FClient) PrepareAuthentication(msg, appID string, marshalledRegs [][]byte) (
-	*PendingAuth, error) {
+func (c *RemoteU2FClient) PrepareAuthentication(
+	msg, appID string, regs []u2f.Registration) (*PendingAuth, error) {
 
-	var trustedFacets = []string{appID}
-
-	pa := &PendingAuth{}
-	signReqs := []*u2f.SignRequest{}
-
-	// Generate one signature request for each registration.
-	for _, mreg := range marshalledRegs {
-		reg := &u2f.Registration{}
-		err := reg.UnmarshalBinary(mreg)
-		if err != nil {
-			return nil, fmt.Errorf("u2f.ParseRegistration: %v\n", err)
-		}
-
-		// Can/should we reuse the challenge for all the registrations?
-		challenge, err := u2f.NewChallenge(appID, trustedFacets)
-		if err != nil {
-			return nil, fmt.Errorf("u2f.NewChallenge error: %v", err)
-		}
-
-		sr := challenge.SignRequest(*reg)
-		signReqs = append(signReqs, sr)
-
-		pa.challenges = append(pa.challenges, challenge)
-		pa.regs = append(pa.regs, reg)
+	challenge, err := u2f.NewChallenge(appID, []string{appID})
+	if err != nil {
+		return nil, fmt.Errorf("u2f.NewChallenge error: %v", err)
 	}
 
+	signReqs := challenge.SignRequest(regs)
 	j, err := json.Marshal(signReqs)
 	if err != nil {
 		return nil, fmt.Errorf("json marshalling error: %v", err)
@@ -173,9 +154,7 @@ func (c *RemoteU2FClient) PrepareAuthentication(msg, appID string, marshalledReg
 		return nil, fmt.Errorf("error preparing: %v", err)
 	}
 
-	pa.Key = key
-
-	return pa, nil
+	return &PendingAuth{key, regs, challenge}, nil
 }
 
 func (c *RemoteU2FClient) CompleteAuthentication(pa *PendingAuth) error {
@@ -192,9 +171,9 @@ func (c *RemoteU2FClient) CompleteAuthentication(pa *PendingAuth) error {
 		return fmt.Errorf("invalid response: %s", err)
 	}
 
-	for i, reg := range pa.regs {
+	for _, reg := range pa.regs {
 		// TODO: support counters.
-		_, err = reg.Authenticate(signResp, *pa.challenges[i], 0)
+		_, err = reg.Authenticate(signResp, *pa.challenge, 0)
 		if err == nil {
 			return nil
 		}

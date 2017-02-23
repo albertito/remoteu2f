@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"math/big"
 	"os"
+
+	"github.com/tstranex/u2f"
 )
 
 // Default configuration directory, relative to the user's home directory.
@@ -109,9 +111,18 @@ func (c *Config) NewBackupCodes() error {
 	return nil
 }
 
-func (c *Config) RegistrationValues() [][]byte {
-	var rs [][]byte
-	for _, r := range c.Registrations {
+// RegistrationValues returns the registrations in the configuration file, as
+// a slice of u2f.Registration structures (which is a friendly form for the
+// client functions).
+func (c *Config) RegistrationValues() []u2f.Registration {
+	var rs []u2f.Registration
+	for _, binr := range c.Registrations {
+		r := u2f.Registration{}
+		if err := r.UnmarshalBinary(binr); err != nil {
+			// TODO - Should we account for this?
+			// Backwards-incompatible changes could cause this.
+			panic(err)
+		}
 		rs = append(rs, r)
 	}
 	return rs

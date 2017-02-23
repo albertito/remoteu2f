@@ -16,6 +16,10 @@ message Url {
 // Prepare an operation.
 message Prepare {
 	// Generic json content to return.
+	// This is a marshalled version of u2f.WebRegisterRequest or
+	// u2f.WebSignRequest, depending on the operation.
+	// We don't need to access this directly in the proxy, so we keep this
+	// opaque and decode it again at javascript.
 	bytes json = 1;
 
 	// User-readable message to show on the web page.

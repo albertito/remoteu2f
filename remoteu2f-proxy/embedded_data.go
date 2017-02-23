@@ -42,7 +42,9 @@ const authenticate_html = `<!DOCTYPE html>
     <script type="text/javascript" src="remoteu2f.js"></script>
     <script type="text/javascript" src="u2f_api.js"></script>
     <script>
-      u2f.sign({{.Request}}, handleKeyResponse, 2*60);
+        req = {{.Request}};
+        u2f.sign(req.appId, req.challenge, req.registeredKeys,
+                 handleKeyResponse, 2*60);
     </script>
 
   </body>
@@ -86,7 +88,9 @@ const register_html = `<!DOCTYPE html>
     <script type="text/javascript" src="remoteu2f.js"></script>
     <script type="text/javascript" src="u2f_api.js"></script>
     <script>
-      u2f.register([{{.Request}}], [], handleKeyResponse, 2*60)
+        req = {{.Request}};
+        u2f.register(req.appId, req.registerRequests, req.registeredKeys,
+              handleKeyResponse, 2*60)
     </script>
 
   </body>
