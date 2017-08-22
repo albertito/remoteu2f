@@ -116,7 +116,7 @@ func (s *Server) getOp(key string) (*PendingOp, bool) {
 }
 
 func (s *Server) checkOauth(ctx context.Context) error {
-	md, ok := metadata.FromContext(ctx)
+	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok || md == nil {
 		return grpc.Errorf(codes.PermissionDenied, "MD not found")
 	}
