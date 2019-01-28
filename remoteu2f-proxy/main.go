@@ -45,7 +45,7 @@ var (
 func validateBaseURL(s string) error {
 	u, err := url.Parse(*baseURL)
 	if err != nil {
-		return fmt.Errorf("malformed url:", err)
+		return fmt.Errorf("malformed url: %v", err)
 	}
 	if u.Scheme != "https" {
 		return fmt.Errorf("scheme MUST be 'https'")

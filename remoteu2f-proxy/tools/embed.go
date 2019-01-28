@@ -86,7 +86,7 @@ func Embed(pkg string, paths []string, outPath string) error {
 
 	out, err := os.Create(outPath)
 	if err != nil {
-		return fmt.Errorf("Error opening %q: %v", *out, err)
+		return fmt.Errorf("Error opening %q: %v", outPath, err)
 	}
 
 	err = tmpl.Execute(out, vals)
