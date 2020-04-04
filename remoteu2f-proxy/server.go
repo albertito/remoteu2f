@@ -199,7 +199,7 @@ func (s *Server) GetOpResponse(ctx context.Context, url *pb.Url) (*pb.Response, 
 	// Remove the data once we've sent a reply.
 	s.removeOp(url.Key)
 
-	return &pb.Response{reply}, nil
+	return &pb.Response{Json: reply}, nil
 }
 
 func (s *Server) GetAppID(ctx context.Context, _ *pb.Void) (*pb.Url, error) {

@@ -83,7 +83,11 @@ func (c *RemoteU2FClient) PrepareRegister(
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	key, err := c.c.PrepareOp(ctx, &pb.Prepare{j, msg, pb.Prepare_REGISTER})
+	key, err := c.c.PrepareOp(ctx, &pb.Prepare{
+		Json:  j,
+		Msg:   msg,
+		Rtype: pb.Prepare_REGISTER,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("error preparing: %v", err)
 	}
@@ -149,7 +153,11 @@ func (c *RemoteU2FClient) PrepareAuthentication(
 	defer cancel()
 
 	key, err := c.c.PrepareOp(
-		ctx, &pb.Prepare{j, msg, pb.Prepare_AUTHENTICATE})
+		ctx, &pb.Prepare{
+			Json:  j,
+			Msg:   msg,
+			Rtype: pb.Prepare_AUTHENTICATE,
+		})
 	if err != nil {
 		return nil, fmt.Errorf("error preparing: %v", err)
 	}
