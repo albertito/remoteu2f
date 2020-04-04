@@ -9,7 +9,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 
 	"blitiri.com.ar/go/remoteu2f/internal/client"
 )

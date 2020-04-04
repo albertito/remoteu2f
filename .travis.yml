@@ -16,7 +16,7 @@ env:
 
 install:
     # Install dependencies, found with "glide list".
-    - go get github.com/codegangsta/cli
+    - go get github.com/urfave/cli
     - go get github.com/golang/glog
     - go get github.com/golang/protobuf/proto
     - go get github.com/gorilla/mux
